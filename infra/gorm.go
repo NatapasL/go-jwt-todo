@@ -43,6 +43,10 @@ func GetDB() *gorm.DB {
 }
 
 func initModel() {
-	db.CreateTable(&models.UserModel{})
-	db.CreateTable(&models.TodoModel{})
+	if !db.HasTable(&models.UserModel{}) {
+		db.CreateTable(&models.UserModel{})
+	}
+	if !db.HasTable(&models.TodoModel{}) {
+		db.CreateTable(&models.TodoModel{})
+	}
 }
