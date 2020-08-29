@@ -30,5 +30,5 @@ func (s *server) init() {
 }
 
 func (s *server) Start() {
-	log.Fatal(router.Run(addr))
+	log.Fatal(s.router.Run(s.addr))
 }
