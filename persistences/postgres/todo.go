@@ -17,10 +17,12 @@ func NewPostgresTodoRepository(db *gorm.DB) repositories.TodoRepository {
 }
 
 func (r *postgresTodoRepository) Create(params forms.CreateTodoParams) (*models.TodoModel, error) {
-	todoModel := &models.TodoModel{
+	todo := &models.TodoModel{
 		UserID: params.UserID,
 		Title:  params.Title,
 	}
 
-	return todoModel, nil
+	r.DB.Create(&todo)
+
+	return todo, nil
 }

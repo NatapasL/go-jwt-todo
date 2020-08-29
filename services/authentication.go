@@ -28,10 +28,10 @@ type TokenDetails struct {
 
 type AccessDetails struct {
 	AccessUuid string
-	UserId     uint64
+	UserId     uint
 }
 
-func (s *AuthenticationService) CreateAuth(userId uint64) (*TokenDetails, error) {
+func (s *AuthenticationService) CreateAuth(userId uint) (*TokenDetails, error) {
 	td, buildErr := s.buildToken(userId)
 	if buildErr != nil {
 		return nil, buildErr
@@ -45,7 +45,7 @@ func (s *AuthenticationService) CreateAuth(userId uint64) (*TokenDetails, error)
 	return td, nil
 }
 
-func (s *AuthenticationService) buildToken(userId uint64) (*TokenDetails, error) {
+func (s *AuthenticationService) buildToken(userId uint) (*TokenDetails, error) {
 	td := &TokenDetails{}
 
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
@@ -81,7 +81,7 @@ func (s *AuthenticationService) buildToken(userId uint64) (*TokenDetails, error)
 	return td, nil
 }
 
-func (s *AuthenticationService) saveToken(userId uint64, td *TokenDetails) error {
+func (s *AuthenticationService) saveToken(userId uint, td *TokenDetails) error {
 	at := time.Unix(td.AtExpires, 0)
 	rt := time.Unix(td.RtExpires, 0)
 	now := time.Now()
@@ -143,7 +143,7 @@ func (s *AuthenticationService) fetchAccessDetails(accessUuid string) (*AccessDe
 	}
 	return &AccessDetails{
 		AccessUuid: accessUuid,
-		UserId:     userId,
+		UserId:     uint(userId),
 	}, nil
 }
 
@@ -172,7 +172,7 @@ func (s *AuthenticationService) RefreshAuth(refreshToken string) (*TokenDetails,
 		return nil, fmt.Errorf("Unable to remove refresh token")
 	}
 
-	tokenDetails, err := s.CreateAuth(userId)
+	tokenDetails, err := s.CreateAuth(uint(userId))
 	if err != nil {
 		return nil, err
 	}

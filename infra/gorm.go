@@ -5,6 +5,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	"go-jwt-todo/models"
 )
 
 var db *gorm.DB
@@ -32,8 +34,15 @@ func ConnectToDb() {
 	if err != nil {
 		panic(err)
 	}
+
+	initModel()
 }
 
 func GetDB() *gorm.DB {
 	return db
+}
+
+func initModel() {
+	db.CreateTable(&models.UserModel{})
+	db.CreateTable(&models.TodoModel{})
 }

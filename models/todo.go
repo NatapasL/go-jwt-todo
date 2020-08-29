@@ -1,6 +1,16 @@
 package models
 
+import (
+	"github.com/jinzhu/gorm"
+)
+
 type TodoModel struct {
-	UserID uint64 `json:"user_id"`
-	Title  string `json:"title"`
+	gorm.Model
+
+	UserID uint   `sql:"type:VARCHAR(255)"`
+	Title  string `sql:"type:VARCHAR(255)"`
+}
+
+func (m *TodoModel) TableName() string {
+	return "todos"
 }

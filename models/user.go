@@ -1,7 +1,16 @@
 package models
 
+import (
+	"github.com/jinzhu/gorm"
+)
+
 type UserModel struct {
-	ID       uint64 `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	gorm.Model
+
+	Username string `sql:"type:VARCHAR(255)"`
+	Password string `sql:"type:VARCHAR(255)"`
+}
+
+func (m *UserModel) TableName() string {
+	return "users"
 }
