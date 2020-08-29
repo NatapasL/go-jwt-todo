@@ -29,6 +29,10 @@ func (s *server) init() {
 	s.addr = fmt.Sprintf("%s:%s", host, port)
 }
 
+func NewServer() server {
+	return server{}
+}
+
 func (s *server) Start() {
 	log.Fatal(s.router.Run(s.addr))
 }
