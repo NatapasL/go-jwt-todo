@@ -12,6 +12,5 @@ func init() {
 }
 
 func main() {
-	server := infra.NewServer()
-	server.Start()
+	infra.StartServer()
 }
