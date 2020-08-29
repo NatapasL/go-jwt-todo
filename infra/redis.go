@@ -15,7 +15,6 @@ func GetRedisClient() *redis.Client {
 
 	if err := initRedisClient(); err != nil {
 		panic(err)
-		return nil
 	}
 
 	return client
