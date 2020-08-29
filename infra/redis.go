@@ -8,16 +8,17 @@ import (
 
 var client *redis.Client
 
-func GetRedisClient() (*redis.Client, error) {
+func GetRedisClient() *redis.Client {
 	if client != nil {
-		return client, nil
+		return client
 	}
 
 	if err := initRedisClient(); err != nil {
-		return nil, err
+		panic(err)
+		return nil
 	}
 
-	return client, nil
+	return client
 }
 
 func initRedisClient() error {
