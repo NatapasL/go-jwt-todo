@@ -12,17 +12,18 @@ var todoController controllers.TodoController
 
 func mapRoutes(router *gin.Engine) {
 	// redis
-	redis, err := GetRedisClient()
-	if err != nil {
-		panic(err)
-	}
+	redis := GetRedisClient()
+	db := GetDB()
+
+	ConnectToDb()
+	_ = GetDB()
 
 	// controllers
 	authenticationController := controllers.AuthenticationController{
 		Redis: redis,
-		DB:    "db",
+		DB:    db,
 	}
-	todoController := controllers.TodoController{DB: "db"}
+	todoController := controllers.TodoController{DB: db}
 
 	// middlewares
 	authenticationMiddleware := middlewares.AuthenticationMiddleware(redis)

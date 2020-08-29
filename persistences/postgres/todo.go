@@ -1,16 +1,18 @@
 package persistences
 
 import (
+	"github.com/jinzhu/gorm"
+
 	"go-jwt-todo/forms"
 	"go-jwt-todo/models"
 	"go-jwt-todo/repositories"
 )
 
 type postgresTodoRepository struct {
-	DB string
+	DB *gorm.DB
 }
 
-func NewPostgresTodoRepository(db string) repositories.TodoRepository {
+func NewPostgresTodoRepository(db *gorm.DB) repositories.TodoRepository {
 	return &postgresTodoRepository{DB: db}
 }
 

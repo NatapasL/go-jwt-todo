@@ -9,6 +9,10 @@ import (
 )
 
 func StartServer() {
+	ConnectToDb()
+	db := GetDB()
+	defer db.Close()
+
 	router := gin.Default()
 	mapRoutes(router)
 

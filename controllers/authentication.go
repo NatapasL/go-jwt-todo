@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
+	"github.com/jinzhu/gorm"
 
 	"go-jwt-todo/forms"
 	"go-jwt-todo/persistences/postgres"
@@ -13,7 +14,7 @@ import (
 
 type AuthenticationController struct {
 	Redis *redis.Client
-	DB    string
+	DB    *gorm.DB
 }
 
 func (controller AuthenticationController) Login(c *gin.Context) {

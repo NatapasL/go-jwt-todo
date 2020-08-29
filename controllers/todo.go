@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 
 	"go-jwt-todo/forms"
 	"go-jwt-todo/persistences/postgres"
@@ -11,7 +12,7 @@ import (
 )
 
 type TodoController struct {
-	DB string
+	DB *gorm.DB
 }
 
 func (controller *TodoController) Create(c *gin.Context) {
