@@ -18,6 +18,9 @@ func StartServer() {
 
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "3000"
+	}
 
 	addr := fmt.Sprintf("%s:%s", host, port)
 	log.Fatal(router.Run(addr))
