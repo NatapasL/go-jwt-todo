@@ -22,9 +22,6 @@ func GetRedisClient() *redis.Client {
 
 func initRedisClient() error {
 	addr := os.Getenv("REDIS_URL")
-	if len(addr) <= 0 {
-		addr = "localhost:6379"
-	}
 
 	client = redis.NewClient(&redis.Options{
 		Addr: addr,
