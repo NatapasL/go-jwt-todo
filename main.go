@@ -1,14 +1,18 @@
 package main
 
 import (
-	"os"
+	"log"
+
+	"github.com/joho/godotenv"
 
 	"github.com/NatapasL/go-jwt-todo/infra"
 )
 
 func init() {
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd")
-	os.Setenv("REFRESH_SECRET", "mkjdsfjklsdj")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
 
 func main() {
