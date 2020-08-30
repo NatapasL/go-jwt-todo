@@ -16,7 +16,7 @@ func NewRedisAuthTokenRepository(r *redis.Client) repositories.AuthTokenReposito
 	return &redisAuthTokenRepository{Redis: r}
 }
 
-func (r redisAuthTokenRepository) Find(key string) (string, error) {
+func (r *redisAuthTokenRepository) Find(key string) (string, error) {
 	result, err := r.Redis.Get(key).Result()
 	if err != nil {
 		return "", err
@@ -24,7 +24,7 @@ func (r redisAuthTokenRepository) Find(key string) (string, error) {
 	return string(result), nil
 }
 
-func (r redisAuthTokenRepository) Create(key string, value string, expiration time.Duration) error {
+func (r *redisAuthTokenRepository) Create(key string, value string, expiration time.Duration) error {
 	err := r.Redis.Set(key, value, expiration).Err()
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func (r redisAuthTokenRepository) Create(key string, value string, expiration ti
 	return nil
 }
 
-func (r redisAuthTokenRepository) Delete(key string) error {
+func (r *redisAuthTokenRepository) Delete(key string) error {
 	_, err := r.Redis.Del(key).Result()
 	if err != nil {
 		return err
