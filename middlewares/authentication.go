@@ -10,7 +10,7 @@ import (
 	"github.com/NatapasL/go-jwt-todo/services"
 )
 
-func AuthenticationMiddleware(r *redis.Client) gin.HandlerFunc {
+func NewAuthenticationMiddleware(r *redis.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := extractToken(c.Request)
 		verifyTokenService := services.NewAuthenticationService(r)
