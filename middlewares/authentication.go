@@ -13,7 +13,7 @@ import (
 func AuthenticationMiddleware(r *redis.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := extractToken(c.Request)
-		verifyTokenService := services.AuthenticationService{Redis: r}
+		verifyTokenService := services.NewAuthenticationService(r)
 		accessDetails, err := verifyTokenService.VerifyToken(token)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, "unauthorized")

@@ -13,7 +13,16 @@ import (
 	"github.com/NatapasL/go-jwt-todo/helpers"
 )
 
-type AuthenticationService struct {
+type AuthenticationService interface {
+	CreateAuth(userId uint) (*TokenDetails, error)
+	buildToken(userId uint) (*TokenDetails, error)
+	saveToken(userId uint, td *TokenDetails) error
+	DeleteAuth(uuid string) error
+	VerifyToken(token string) (*AccessDetails, error)
+	fetchAccessDetails(accessUuid string) (*AccessDetails, error)
+	RefreshAuth(refreshToken string) (*TokenDetails, error)
+}
+type authenticationService struct {
 	Redis *redis.Client
 }
 
@@ -31,7 +40,11 @@ type AccessDetails struct {
 	UserId     uint
 }
 
-func (s *AuthenticationService) CreateAuth(userId uint) (*TokenDetails, error) {
+func NewAuthenticationService(r *redis.Client) AuthenticationService {
+	return &authenticationService{Redis: r}
+}
+
+func (s *authenticationService) CreateAuth(userId uint) (*TokenDetails, error) {
 	td, buildErr := s.buildToken(userId)
 	if buildErr != nil {
 		return nil, buildErr
@@ -45,7 +58,7 @@ func (s *AuthenticationService) CreateAuth(userId uint) (*TokenDetails, error) {
 	return td, nil
 }
 
-func (s *AuthenticationService) buildToken(userId uint) (*TokenDetails, error) {
+func (s *authenticationService) buildToken(userId uint) (*TokenDetails, error) {
 	td := &TokenDetails{}
 
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
@@ -81,7 +94,7 @@ func (s *AuthenticationService) buildToken(userId uint) (*TokenDetails, error) {
 	return td, nil
 }
 
-func (s *AuthenticationService) saveToken(userId uint, td *TokenDetails) error {
+func (s *authenticationService) saveToken(userId uint, td *TokenDetails) error {
 	at := time.Unix(td.AtExpires, 0)
 	rt := time.Unix(td.RtExpires, 0)
 	now := time.Now()
@@ -99,7 +112,7 @@ func (s *AuthenticationService) saveToken(userId uint, td *TokenDetails) error {
 	return nil
 }
 
-func (s *AuthenticationService) DeleteAuth(uuid string) error {
+func (s *authenticationService) DeleteAuth(uuid string) error {
 	_, err := s.Redis.Del(uuid).Result()
 	if err != nil {
 		return err
@@ -107,7 +120,7 @@ func (s *AuthenticationService) DeleteAuth(uuid string) error {
 	return nil
 }
 
-func (s *AuthenticationService) VerifyToken(token string) (*AccessDetails, error) {
+func (s *authenticationService) VerifyToken(token string) (*AccessDetails, error) {
 
 	jwtToken, err := helpers.ParseJwt(token, os.Getenv("ACCESS_SECRET"))
 	if err != nil {
@@ -132,7 +145,7 @@ func (s *AuthenticationService) VerifyToken(token string) (*AccessDetails, error
 	return accessDetails, nil
 }
 
-func (s *AuthenticationService) fetchAccessDetails(accessUuid string) (*AccessDetails, error) {
+func (s *authenticationService) fetchAccessDetails(accessUuid string) (*AccessDetails, error) {
 	result, err := s.Redis.Get(accessUuid).Result()
 	if err != nil {
 		return nil, err
@@ -147,7 +160,7 @@ func (s *AuthenticationService) fetchAccessDetails(accessUuid string) (*AccessDe
 	}, nil
 }
 
-func (s *AuthenticationService) RefreshAuth(refreshToken string) (*TokenDetails, error) {
+func (s *authenticationService) RefreshAuth(refreshToken string) (*TokenDetails, error) {
 	jwtToken, err := helpers.ParseJwt(refreshToken, os.Getenv("REFRESH_SECRET"))
 	if err != nil {
 		return nil, err

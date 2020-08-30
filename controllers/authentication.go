@@ -32,7 +32,7 @@ func (controller AuthenticationController) Login(c *gin.Context) {
 		return
 	}
 
-	authService := services.AuthenticationService{Redis: controller.Redis}
+	authService := services.NewAuthenticationService(controller.Redis)
 	tokenDetails, err := authService.CreateAuth(user.ID)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
@@ -57,7 +57,7 @@ func (controller AuthenticationController) Logout(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "unauthorized")
 		return
 	}
-	authService := services.AuthenticationService{Redis: controller.Redis}
+	authService := services.NewAuthenticationService(controller.Redis)
 	err := authService.DeleteAuth(accessDetails.AccessUuid)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
@@ -75,7 +75,7 @@ func (controller AuthenticationController) Refresh(c *gin.Context) {
 	}
 	refreshToken := params.RefreshToken
 
-	authService := services.AuthenticationService{Redis: controller.Redis}
+	authService := services.NewAuthenticationService(controller.Redis)
 	tokenDetails, err := authService.RefreshAuth(refreshToken)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
