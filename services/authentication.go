@@ -11,6 +11,7 @@ import (
 	"github.com/twinj/uuid"
 
 	"github.com/NatapasL/go-jwt-todo/helpers"
+	"github.com/NatapasL/go-jwt-todo/persistences/redis"
 )
 
 type AuthenticationService interface {
@@ -99,12 +100,12 @@ func (s *authenticationService) saveToken(userId uint, td *TokenDetails) error {
 	rt := time.Unix(td.RtExpires, 0)
 	now := time.Now()
 
-	errAccess := s.Redis.Set(td.AccessUuid, strconv.Itoa(int(userId)), at.Sub(now)).Err()
+	tokenRepository := persistences.NewRedisAuthTokenRepository(s.Redis)
+	errAccess := tokenRepository.Create(td.AccessUuid, strconv.Itoa(int(userId)), at.Sub(now))
 	if errAccess != nil {
 		return errAccess
 	}
-
-	errRefresh := s.Redis.Set(td.RefreshUuid, strconv.Itoa(int(userId)), rt.Sub(now)).Err()
+	errRefresh := tokenRepository.Create(td.RefreshUuid, strconv.Itoa(int(userId)), rt.Sub(now))
 	if errRefresh != nil {
 		return errRefresh
 	}
@@ -113,7 +114,8 @@ func (s *authenticationService) saveToken(userId uint, td *TokenDetails) error {
 }
 
 func (s *authenticationService) DeleteAuth(uuid string) error {
-	_, err := s.Redis.Del(uuid).Result()
+	tokenRepository := persistences.NewRedisAuthTokenRepository(s.Redis)
+	err := tokenRepository.Delete(uuid)
 	if err != nil {
 		return err
 	}
@@ -121,7 +123,6 @@ func (s *authenticationService) DeleteAuth(uuid string) error {
 }
 
 func (s *authenticationService) VerifyToken(token string) (*AccessDetails, error) {
-
 	jwtToken, err := helpers.ParseJwt(token, os.Getenv("ACCESS_SECRET"))
 	if err != nil {
 		return nil, err
@@ -146,7 +147,8 @@ func (s *authenticationService) VerifyToken(token string) (*AccessDetails, error
 }
 
 func (s *authenticationService) fetchAccessDetails(accessUuid string) (*AccessDetails, error) {
-	result, err := s.Redis.Get(accessUuid).Result()
+	tokenRepository := persistences.NewRedisAuthTokenRepository(s.Redis)
+	result, err := tokenRepository.Find(accessUuid)
 	if err != nil {
 		return nil, err
 	}
