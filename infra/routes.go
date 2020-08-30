@@ -3,8 +3,8 @@ package infra
 import (
 	"github.com/gin-gonic/gin"
 
-	"go-jwt-todo/controllers"
-	"go-jwt-todo/middlewares"
+	"github.com/NatapasL/go-jwt-todo/controllers"
+	"github.com/NatapasL/go-jwt-todo/middlewares"
 )
 
 var authenticationController controllers.AuthenticationController

@@ -5,9 +5,9 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"go-jwt-todo/forms"
-	"go-jwt-todo/models"
-	"go-jwt-todo/repositories"
+	"github.com/NatapasL/go-jwt-todo/forms"
+	"github.com/NatapasL/go-jwt-todo/models"
+	"github.com/NatapasL/go-jwt-todo/repositories"
 )
 
 type postgresUserRepository struct {

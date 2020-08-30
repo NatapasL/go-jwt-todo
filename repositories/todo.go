@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"go-jwt-todo/forms"
-	"go-jwt-todo/models"
+	"github.com/NatapasL/go-jwt-todo/forms"
+	"github.com/NatapasL/go-jwt-todo/models"
 )
 
 type TodoRepository interface {

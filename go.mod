@@ -1,4 +1,4 @@
-module go-jwt-todo
+module github.com/NatapasL/go-jwt-todo
 
 go 1.15
 

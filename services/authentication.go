@@ -10,7 +10,7 @@ import (
 	"github.com/go-redis/redis/v7"
 	"github.com/twinj/uuid"
 
-	"go-jwt-todo/helpers"
+	"github.com/NatapasL/go-jwt-todo/helpers"
 )
 
 type AuthenticationService struct {

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"go-jwt-todo/infra"
+	"github.com/NatapasL/go-jwt-todo/infra"
 )
 
 func init() {

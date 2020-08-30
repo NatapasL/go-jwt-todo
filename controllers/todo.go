@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 
-	"go-jwt-todo/forms"
-	"go-jwt-todo/persistences/postgres"
-	"go-jwt-todo/services"
+	"github.com/NatapasL/go-jwt-todo/forms"
+	"github.com/NatapasL/go-jwt-todo/persistences/postgres"
+	"github.com/NatapasL/go-jwt-todo/services"
 )
 
 type TodoController struct {

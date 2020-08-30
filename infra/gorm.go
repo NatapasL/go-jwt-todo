@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
-	"go-jwt-todo/models"
+	"github.com/NatapasL/go-jwt-todo/models"
 )
 
 var db *gorm.DB

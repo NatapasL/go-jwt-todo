@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
 
-	"go-jwt-todo/services"
+	"github.com/NatapasL/go-jwt-todo/services"
 )
 
 func AuthenticationMiddleware(r *redis.Client) gin.HandlerFunc {
