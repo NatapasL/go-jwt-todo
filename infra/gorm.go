@@ -1,7 +1,6 @@
 package infra
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/jinzhu/gorm"
@@ -13,25 +12,10 @@ import (
 var db *gorm.DB
 
 func ConnectToDb() {
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-
 	var err error
 
-	dbInfo := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		host,
-		port,
-		user,
-		password,
-		dbname,
-	)
-
-	fmt.Println(dbInfo)
-	db, err = gorm.Open("postgres", dbInfo)
+	dbUrl := os.Getenv("DATABASE_URL")
+	db, err = gorm.Open("postgres", dbUrl)
 	if err != nil {
 		panic(err)
 	}
