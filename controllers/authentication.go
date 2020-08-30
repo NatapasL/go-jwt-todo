@@ -12,12 +12,22 @@ import (
 	"github.com/NatapasL/go-jwt-todo/services"
 )
 
-type AuthenticationController struct {
+type AuthenticationController interface {
+	Login(c *gin.Context)
+	Logout(c *gin.Context)
+	Refresh(c *gin.Context)
+}
+
+type authenticationController struct {
 	Redis *redis.Client
 	DB    *gorm.DB
 }
 
-func (controller AuthenticationController) Login(c *gin.Context) {
+func NewAuthenticationController(r *redis.Client, db *gorm.DB) AuthenticationController {
+	return &authenticationController{Redis: r, DB: db}
+}
+
+func (controller authenticationController) Login(c *gin.Context) {
 	var params forms.FindUserParams
 
 	if err := c.ShouldBindJSON(&params); err != nil {
@@ -46,7 +56,7 @@ func (controller AuthenticationController) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, tokens)
 }
 
-func (controller AuthenticationController) Logout(c *gin.Context) {
+func (controller authenticationController) Logout(c *gin.Context) {
 	access, ok := c.Get("access_details")
 	if !ok {
 		c.JSON(http.StatusUnauthorized, "unauthorized")
@@ -66,7 +76,7 @@ func (controller AuthenticationController) Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, "Successfully logged out")
 }
 
-func (controller AuthenticationController) Refresh(c *gin.Context) {
+func (controller authenticationController) Refresh(c *gin.Context) {
 	var params forms.RefreshTokenParams
 
 	if err := c.ShouldBindJSON(&params); err != nil {

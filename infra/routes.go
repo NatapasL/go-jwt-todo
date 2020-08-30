@@ -19,10 +19,7 @@ func mapRoutes(router *gin.Engine) {
 	_ = GetDB()
 
 	// controllers
-	authenticationController := controllers.AuthenticationController{
-		Redis: redis,
-		DB:    db,
-	}
+	authenticationController := controllers.NewAuthenticationController(redis, db)
 	todoController := controllers.TodoController{DB: db}
 
 	// middlewares
