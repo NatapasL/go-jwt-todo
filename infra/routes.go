@@ -20,7 +20,7 @@ func mapRoutes(router *gin.Engine) {
 
 	// controllers
 	authenticationController := controllers.NewAuthenticationController(redis, db)
-	todoController := controllers.TodoController{DB: db}
+	todoController := controllers.NewTodoController(db)
 
 	// middlewares
 	authenticationMiddleware := middlewares.AuthenticationMiddleware(redis)

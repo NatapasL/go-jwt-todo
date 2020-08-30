@@ -11,11 +11,19 @@ import (
 	"github.com/NatapasL/go-jwt-todo/services"
 )
 
-type TodoController struct {
+type TodoController interface {
+	Create(c *gin.Context)
+}
+
+type todoController struct {
 	DB *gorm.DB
 }
 
-func (controller *TodoController) Create(c *gin.Context) {
+func NewTodoController(db *gorm.DB) TodoController {
+	return &todoController{DB: db}
+}
+
+func (controller *todoController) Create(c *gin.Context) {
 	var params forms.CreateTodoParams
 	if err := c.ShouldBindJSON(&params); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "invalid json")
